@@ -1,0 +1,1058 @@
+{
+  "v": 1,
+  "id": "e8f2e605-0042-4bc8-9ab7-52a10c70fc91",
+  "rev": 1,
+  "name": "Cisco Meraki Flow",
+  "summary": "Cisco Meraki Flow Events",
+  "description": "Content Pack includes Cisco Meraki MX Series Flow parser (GROK) and dashboard. Remember use RAW syslog.",
+  "vendor": "Cisco Meraki",
+  "url": "https://github.com/hrleinonen/graylog-meraki",
+  "parameters": [],
+  "entities": [
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "497f40cc-f92a-4ba0-9fd0-9f575e719b55",
+      "data": {
+        "name": "LETTERSANDLINES",
+        "pattern": "[a-zA-Z_-]+"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.1+de74b68"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "input",
+        "version": "1"
+      },
+      "id": "81bb0fc4-89db-413c-ad5a-9b526a2d4c17",
+      "data": {
+        "title": {
+          "@type": "string",
+          "@value": "MERAKI_LOGS_FLOWS"
+        },
+        "configuration": {
+          "recv_buffer_size": {
+            "@type": "integer",
+            "@value": 262144
+          },
+          "bind_address": {
+            "@type": "string",
+            "@value": "0.0.0.0"
+          },
+          "port": {
+            "@type": "integer",
+            "@value": 5558
+          },
+          "number_worker_threads": {
+            "@type": "integer",
+            "@value": 2
+          }
+        },
+        "static_fields": {},
+        "type": {
+          "@type": "string",
+          "@value": "org.graylog2.inputs.raw.udp.RawUDPInput"
+        },
+        "global": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "extractors": [
+          {
+            "target_field": {
+              "@type": "string",
+              "@value": ""
+            },
+            "condition_value": {
+              "@type": "string",
+              "@value": ""
+            },
+            "order": {
+              "@type": "integer",
+              "@value": 0
+            },
+            "converters": [],
+            "configuration": {
+              "grok_pattern": {
+                "@type": "string",
+                "@value": "%{LETTERSANDLINES:FLOW_TYPE}"
+              }
+            },
+            "source_field": {
+              "@type": "string",
+              "@value": "message"
+            },
+            "title": {
+              "@type": "string",
+              "@value": "MERAKI_LOGS_FLOWS_TYPE"
+            },
+            "type": {
+              "@type": "string",
+              "@value": "GROK"
+            },
+            "cursor_strategy": {
+              "@type": "string",
+              "@value": "COPY"
+            },
+            "condition_type": {
+              "@type": "string",
+              "@value": "NONE"
+            }
+          },
+          {
+            "target_field": {
+              "@type": "string",
+              "@value": ""
+            },
+            "condition_value": {
+              "@type": "string",
+              "@value": ""
+            },
+            "order": {
+              "@type": "integer",
+              "@value": 0
+            },
+            "converters": [],
+            "configuration": {
+              "grok_pattern": {
+                "@type": "string",
+                "@value": "src=%{IP:SRCIP} dst=%{IP:DSTIP} protocol=%{URIPROTO:PROTOCOL} sport=%{NUMBER:SRCPORT} dport=%{NUMBER:DSTPORT} translated_src_ip=%{IP:TRANSLATED_SRC_IP} translated_port=%{NUMBER:TRANSLATED_PORT}|src=%{IP:SRCIP} dst=%{IP:DSTIP} protocol=%{URIPROTO:PROTOCOL} sport=%{NUMBER:SRCPORT} dport=%{NUMBER:DSTPORT} translated_dst_ip=%{IP:TRANSLATED_DST_IP} translated_port=%{NUMBER:TRANSLATED_PORT}|src=%{IP:SRCIP} dst=%{IP:DSTIP} protocol=%{URIPROTO:PROTOCOL} sport=%{NUMBER:SRCPORT} dport=%{NUMBER:DSTPORT}|src=%{IP:SRCIP} dst=%{IP:DSTIP} protocol=%{URIPROTO:PROTOCOL} translated_dst_ip=%{IP:TRANSLATED_DST_IP}|src=%{IP:SRCIP} dst=%{IP:DSTIP} protocol=%{URIPROTO:PROTOCOL} translated_src_ip=%{IP:TRANSLATED_SRC_IP}"
+              }
+            },
+            "source_field": {
+              "@type": "string",
+              "@value": "message"
+            },
+            "title": {
+              "@type": "string",
+              "@value": "EXTRACTOR_MERAKI_LOGS_FLOWS"
+            },
+            "type": {
+              "@type": "string",
+              "@value": "GROK"
+            },
+            "cursor_strategy": {
+              "@type": "string",
+              "@value": "COPY"
+            },
+            "condition_type": {
+              "@type": "string",
+              "@value": "NONE"
+            }
+          }
+        ]
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.1+de74b68"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "dashboard",
+        "version": "1"
+      },
+      "id": "61996817-1831-4b0d-8429-31e5cac13ecd",
+      "data": {
+        "title": {
+          "@type": "string",
+          "@value": "Meraki MX Flow Records"
+        },
+        "description": {
+          "@type": "string",
+          "@value": "Cisco Meraki MX Flow Records"
+        },
+        "widgets": [
+          {
+            "id": {
+              "@type": "string",
+              "@value": "fdcb366b-dffd-4bba-b0f6-2971ff26f75b"
+            },
+            "description": {
+              "@type": "string",
+              "@value": "Top 10 SRC IPs"
+            },
+            "type": {
+              "@type": "string",
+              "@value": "QUICKVALUES"
+            },
+            "cache_time": {
+              "@type": "integer",
+              "@value": 10
+            },
+            "time_range": {
+              "type": {
+                "@type": "string",
+                "@value": "relative"
+              },
+              "range": {
+                "@type": "integer",
+                "@value": 86400
+              }
+            },
+            "configuration": {
+              "query": {
+                "@type": "string",
+                "@value": "gl2_source_input:5cc0ad098a66df28cf4c4c6c"
+              },
+              "show_pie_chart": {
+                "@type": "boolean",
+                "@value": false
+              },
+              "sort_order": {
+                "@type": "string",
+                "@value": "desc"
+              },
+              "timerange": {
+                "type": {
+                  "@type": "string",
+                  "@value": "relative"
+                },
+                "range": {
+                  "@type": "integer",
+                  "@value": 86400
+                }
+              },
+              "stacked_fields": {
+                "@type": "string",
+                "@value": ""
+              },
+              "data_table_limit": {
+                "@type": "integer",
+                "@value": 10
+              },
+              "field": {
+                "@type": "string",
+                "@value": "SRCIP"
+              },
+              "show_data_table": {
+                "@type": "boolean",
+                "@value": true
+              },
+              "limit": {
+                "@type": "integer",
+                "@value": 10
+              }
+            },
+            "position": {
+              "width": {
+                "@type": "integer",
+                "@value": 2
+              },
+              "height": {
+                "@type": "integer",
+                "@value": 4
+              },
+              "row": {
+                "@type": "integer",
+                "@value": 11
+              },
+              "col": {
+                "@type": "integer",
+                "@value": 3
+              }
+            }
+          },
+          {
+            "id": {
+              "@type": "string",
+              "@value": "18b88db5-52bf-4195-a18e-ef57f3dba720"
+            },
+            "description": {
+              "@type": "string",
+              "@value": "Message Count"
+            },
+            "type": {
+              "@type": "string",
+              "@value": "SEARCH_RESULT_CHART"
+            },
+            "cache_time": {
+              "@type": "integer",
+              "@value": 10
+            },
+            "time_range": {
+              "type": {
+                "@type": "string",
+                "@value": "relative"
+              },
+              "range": {
+                "@type": "integer",
+                "@value": 86400
+              }
+            },
+            "configuration": {
+              "interval": {
+                "@type": "string",
+                "@value": "hour"
+              },
+              "timerange": {
+                "type": {
+                  "@type": "string",
+                  "@value": "relative"
+                },
+                "range": {
+                  "@type": "integer",
+                  "@value": 86400
+                }
+              },
+              "query": {
+                "@type": "string",
+                "@value": "gl2_source_input:5cc0ad098a66df28cf4c4c6c"
+              }
+            },
+            "position": {
+              "width": {
+                "@type": "integer",
+                "@value": 4
+              },
+              "height": {
+                "@type": "integer",
+                "@value": 5
+              },
+              "row": {
+                "@type": "integer",
+                "@value": 1
+              },
+              "col": {
+                "@type": "integer",
+                "@value": 5
+              }
+            }
+          },
+          {
+            "id": {
+              "@type": "string",
+              "@value": "c5cc1cce-dfcd-4077-8d4d-943a15b93c64"
+            },
+            "description": {
+              "@type": "string",
+              "@value": "Destination IP Map 1 Day"
+            },
+            "type": {
+              "@type": "string",
+              "@value": "org.graylog.plugins.map.widget.strategy.MapWidgetStrategy"
+            },
+            "cache_time": {
+              "@type": "integer",
+              "@value": 10
+            },
+            "time_range": {
+              "type": {
+                "@type": "string",
+                "@value": "relative"
+              },
+              "range": {
+                "@type": "integer",
+                "@value": 86400
+              }
+            },
+            "configuration": {
+              "timerange": {
+                "type": {
+                  "@type": "string",
+                  "@value": "relative"
+                },
+                "range": {
+                  "@type": "integer",
+                  "@value": 86400
+                }
+              },
+              "field": {
+                "@type": "string",
+                "@value": "dsip_geolocation"
+              },
+              "query": {
+                "@type": "string",
+                "@value": ""
+              }
+            },
+            "position": {
+              "width": {
+                "@type": "integer",
+                "@value": 4
+              },
+              "height": {
+                "@type": "integer",
+                "@value": 5
+              },
+              "row": {
+                "@type": "integer",
+                "@value": 1
+              },
+              "col": {
+                "@type": "integer",
+                "@value": 1
+              }
+            }
+          },
+          {
+            "id": {
+              "@type": "string",
+              "@value": "7871d439-7a09-4af6-9ee6-1db9d5f99cae"
+            },
+            "description": {
+              "@type": "string",
+              "@value": "10 Rarest SRC Ports 1 Day"
+            },
+            "type": {
+              "@type": "string",
+              "@value": "QUICKVALUES"
+            },
+            "cache_time": {
+              "@type": "integer",
+              "@value": 10
+            },
+            "time_range": {
+              "type": {
+                "@type": "string",
+                "@value": "relative"
+              },
+              "range": {
+                "@type": "integer",
+                "@value": 86400
+              }
+            },
+            "configuration": {
+              "query": {
+                "@type": "string",
+                "@value": "gl2_source_input:5cc0ad098a66df28cf4c4c6c AND DSTPORT:445"
+              },
+              "show_pie_chart": {
+                "@type": "boolean",
+                "@value": false
+              },
+              "sort_order": {
+                "@type": "string",
+                "@value": "asc"
+              },
+              "timerange": {
+                "type": {
+                  "@type": "string",
+                  "@value": "relative"
+                },
+                "range": {
+                  "@type": "integer",
+                  "@value": 86400
+                }
+              },
+              "stacked_fields": {
+                "@type": "string",
+                "@value": ""
+              },
+              "data_table_limit": {
+                "@type": "integer",
+                "@value": 10
+              },
+              "field": {
+                "@type": "string",
+                "@value": "SRCPORT"
+              },
+              "show_data_table": {
+                "@type": "boolean",
+                "@value": true
+              },
+              "limit": {
+                "@type": "integer",
+                "@value": 10
+              }
+            },
+            "position": {
+              "width": {
+                "@type": "integer",
+                "@value": 2
+              },
+              "height": {
+                "@type": "integer",
+                "@value": 5
+              },
+              "row": {
+                "@type": "integer",
+                "@value": 6
+              },
+              "col": {
+                "@type": "integer",
+                "@value": 3
+              }
+            }
+          },
+          {
+            "id": {
+              "@type": "string",
+              "@value": "c2bb273f-abfc-47f5-8151-9c561211ab11"
+            },
+            "description": {
+              "@type": "string",
+              "@value": "Protocols 1 Day"
+            },
+            "type": {
+              "@type": "string",
+              "@value": "QUICKVALUES"
+            },
+            "cache_time": {
+              "@type": "integer",
+              "@value": 10
+            },
+            "time_range": {
+              "type": {
+                "@type": "string",
+                "@value": "relative"
+              },
+              "range": {
+                "@type": "integer",
+                "@value": 86400
+              }
+            },
+            "configuration": {
+              "query": {
+                "@type": "string",
+                "@value": "gl2_source_input:5cc0ad098a66df28cf4c4c6c"
+              },
+              "show_pie_chart": {
+                "@type": "boolean",
+                "@value": false
+              },
+              "sort_order": {
+                "@type": "string",
+                "@value": "desc"
+              },
+              "timerange": {
+                "type": {
+                  "@type": "string",
+                  "@value": "relative"
+                },
+                "range": {
+                  "@type": "integer",
+                  "@value": 86400
+                }
+              },
+              "stacked_fields": {
+                "@type": "string",
+                "@value": ""
+              },
+              "data_table_limit": {
+                "@type": "integer",
+                "@value": 50
+              },
+              "field": {
+                "@type": "string",
+                "@value": "PROTOCOL"
+              },
+              "show_data_table": {
+                "@type": "boolean",
+                "@value": true
+              },
+              "limit": {
+                "@type": "integer",
+                "@value": 5
+              }
+            },
+            "position": {
+              "width": {
+                "@type": "integer",
+                "@value": 2
+              },
+              "height": {
+                "@type": "integer",
+                "@value": 4
+              },
+              "row": {
+                "@type": "integer",
+                "@value": 11
+              },
+              "col": {
+                "@type": "integer",
+                "@value": 5
+              }
+            }
+          },
+          {
+            "id": {
+              "@type": "string",
+              "@value": "3bf318f5-a441-4f91-b9d6-f7920d3727e1"
+            },
+            "description": {
+              "@type": "string",
+              "@value": "10 Common DST Countries 1 Day"
+            },
+            "type": {
+              "@type": "string",
+              "@value": "QUICKVALUES"
+            },
+            "cache_time": {
+              "@type": "integer",
+              "@value": 10
+            },
+            "time_range": {
+              "type": {
+                "@type": "string",
+                "@value": "relative"
+              },
+              "range": {
+                "@type": "integer",
+                "@value": 86400
+              }
+            },
+            "configuration": {
+              "query": {
+                "@type": "string",
+                "@value": "gl2_source_input:5cc0ad098a66df28cf4c4c6c"
+              },
+              "show_pie_chart": {
+                "@type": "boolean",
+                "@value": false
+              },
+              "sort_order": {
+                "@type": "string",
+                "@value": "desc"
+              },
+              "timerange": {
+                "type": {
+                  "@type": "string",
+                  "@value": "relative"
+                },
+                "range": {
+                  "@type": "integer",
+                  "@value": 86400
+                }
+              },
+              "stacked_fields": {
+                "@type": "string",
+                "@value": ""
+              },
+              "data_table_limit": {
+                "@type": "integer",
+                "@value": 10
+              },
+              "field": {
+                "@type": "string",
+                "@value": "dsip_country_code"
+              },
+              "show_data_table": {
+                "@type": "boolean",
+                "@value": true
+              },
+              "limit": {
+                "@type": "integer",
+                "@value": 10
+              }
+            },
+            "position": {
+              "width": {
+                "@type": "integer",
+                "@value": 2
+              },
+              "height": {
+                "@type": "integer",
+                "@value": 5
+              },
+              "row": {
+                "@type": "integer",
+                "@value": 6
+              },
+              "col": {
+                "@type": "integer",
+                "@value": 5
+              }
+            }
+          },
+          {
+            "id": {
+              "@type": "string",
+              "@value": "4bfb1ead-8dea-4c88-bd58-c1f3989df898"
+            },
+            "description": {
+              "@type": "string",
+              "@value": "Top 10 DST IPs"
+            },
+            "type": {
+              "@type": "string",
+              "@value": "QUICKVALUES"
+            },
+            "cache_time": {
+              "@type": "integer",
+              "@value": 10
+            },
+            "time_range": {
+              "type": {
+                "@type": "string",
+                "@value": "relative"
+              },
+              "range": {
+                "@type": "integer",
+                "@value": 86400
+              }
+            },
+            "configuration": {
+              "query": {
+                "@type": "string",
+                "@value": "gl2_source_input:5cc0ad098a66df28cf4c4c6c"
+              },
+              "show_pie_chart": {
+                "@type": "boolean",
+                "@value": false
+              },
+              "sort_order": {
+                "@type": "string",
+                "@value": "desc"
+              },
+              "timerange": {
+                "type": {
+                  "@type": "string",
+                  "@value": "relative"
+                },
+                "range": {
+                  "@type": "integer",
+                  "@value": 86400
+                }
+              },
+              "stacked_fields": {
+                "@type": "string",
+                "@value": ""
+              },
+              "data_table_limit": {
+                "@type": "integer",
+                "@value": 10
+              },
+              "field": {
+                "@type": "string",
+                "@value": "DSTIP"
+              },
+              "show_data_table": {
+                "@type": "boolean",
+                "@value": true
+              },
+              "limit": {
+                "@type": "integer",
+                "@value": 10
+              }
+            },
+            "position": {
+              "width": {
+                "@type": "integer",
+                "@value": 2
+              },
+              "height": {
+                "@type": "integer",
+                "@value": 4
+              },
+              "row": {
+                "@type": "integer",
+                "@value": 11
+              },
+              "col": {
+                "@type": "integer",
+                "@value": 1
+              }
+            }
+          },
+          {
+            "id": {
+              "@type": "string",
+              "@value": "7a18efcc-f9b1-44cd-bfa1-c3f54af3ae6a"
+            },
+            "description": {
+              "@type": "string",
+              "@value": "10 Common DST Ports 1 Day"
+            },
+            "type": {
+              "@type": "string",
+              "@value": "QUICKVALUES"
+            },
+            "cache_time": {
+              "@type": "integer",
+              "@value": 10
+            },
+            "time_range": {
+              "type": {
+                "@type": "string",
+                "@value": "relative"
+              },
+              "range": {
+                "@type": "integer",
+                "@value": 86400
+              }
+            },
+            "configuration": {
+              "query": {
+                "@type": "string",
+                "@value": "gl2_source_input:5cc0ad098a66df28cf4c4c6c"
+              },
+              "show_pie_chart": {
+                "@type": "boolean",
+                "@value": false
+              },
+              "sort_order": {
+                "@type": "string",
+                "@value": "desc"
+              },
+              "timerange": {
+                "type": {
+                  "@type": "string",
+                  "@value": "relative"
+                },
+                "range": {
+                  "@type": "integer",
+                  "@value": 86400
+                }
+              },
+              "stacked_fields": {
+                "@type": "string",
+                "@value": ""
+              },
+              "data_table_limit": {
+                "@type": "integer",
+                "@value": 10
+              },
+              "field": {
+                "@type": "string",
+                "@value": "DSTPORT"
+              },
+              "show_data_table": {
+                "@type": "boolean",
+                "@value": true
+              },
+              "limit": {
+                "@type": "integer",
+                "@value": 10
+              }
+            },
+            "position": {
+              "width": {
+                "@type": "integer",
+                "@value": 2
+              },
+              "height": {
+                "@type": "integer",
+                "@value": 5
+              },
+              "row": {
+                "@type": "integer",
+                "@value": 6
+              },
+              "col": {
+                "@type": "integer",
+                "@value": 1
+              }
+            }
+          },
+          {
+            "id": {
+              "@type": "string",
+              "@value": "3a21b4c8-d363-489a-9e84-c2b8703e7fe5"
+            },
+            "description": {
+              "@type": "string",
+              "@value": "10 Rarest SRC Countries 1 Day"
+            },
+            "type": {
+              "@type": "string",
+              "@value": "QUICKVALUES"
+            },
+            "cache_time": {
+              "@type": "integer",
+              "@value": 10
+            },
+            "time_range": {
+              "type": {
+                "@type": "string",
+                "@value": "relative"
+              },
+              "range": {
+                "@type": "integer",
+                "@value": 86400
+              }
+            },
+            "configuration": {
+              "query": {
+                "@type": "string",
+                "@value": "gl2_source_input:5cc0ad098a66df28cf4c4c6c"
+              },
+              "show_pie_chart": {
+                "@type": "boolean",
+                "@value": false
+              },
+              "sort_order": {
+                "@type": "string",
+                "@value": "asc"
+              },
+              "timerange": {
+                "type": {
+                  "@type": "string",
+                  "@value": "relative"
+                },
+                "range": {
+                  "@type": "integer",
+                  "@value": 86400
+                }
+              },
+              "stacked_fields": {
+                "@type": "string",
+                "@value": ""
+              },
+              "data_table_limit": {
+                "@type": "integer",
+                "@value": 10
+              },
+              "field": {
+                "@type": "string",
+                "@value": "SRCIP_country_code"
+              },
+              "show_data_table": {
+                "@type": "boolean",
+                "@value": true
+              },
+              "limit": {
+                "@type": "integer",
+                "@value": 10
+              }
+            },
+            "position": {
+              "width": {
+                "@type": "integer",
+                "@value": 2
+              },
+              "height": {
+                "@type": "integer",
+                "@value": 5
+              },
+              "row": {
+                "@type": "integer",
+                "@value": 6
+              },
+              "col": {
+                "@type": "integer",
+                "@value": 7
+              }
+            }
+          }
+        ]
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.1+de74b68"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "dcd60029-5366-4009-a060-b96983ad430b",
+      "data": {
+        "name": "NUMBER",
+        "pattern": "(?:%{BASE10NUM})"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.1+de74b68"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "e45a76ee-da80-470a-8d75-971c7b71377f",
+      "data": {
+        "name": "IP",
+        "pattern": "(?:%{IPV6}|%{IPV4})"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.1+de74b68"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "f8aed35c-b31f-44af-a37e-c9d94c60dbf5",
+      "data": {
+        "name": "URIPROTO",
+        "pattern": "[A-Za-z]+(\\+[A-Za-z+]+)?"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.1+de74b68"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "7ae2b4d9-fff1-4e58-ae15-720d7f7b3a78",
+      "data": {
+        "name": "BASE10NUM",
+        "pattern": "(?<![0-9.+-])(?>[+-]?(?:(?:[0-9]+(?:\\.[0-9]+)?)|(?:\\.[0-9]+)))"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.1+de74b68"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "13bc69e0-ff5a-4638-928a-16eca8b3dcf5",
+      "data": {
+        "name": "IPV6",
+        "pattern": "((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:)))(%.+)?"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.1+de74b68"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "0476925c-ec03-4622-8bd8-390d16906d96",
+      "data": {
+        "name": "IPV4",
+        "pattern": "(?<![0-9])(?:(?:[0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])[.](?:[0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])[.](?:[0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])[.](?:[0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5]))(?![0-9])"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.1+de74b68"
+        }
+      ]
+    }
+  ]
+}
