@@ -1,0 +1,265 @@
+{
+  "v": 1,
+  "id": "075433ec-e1e5-4781-9f82-447f4bf83a08",
+  "rev": 1,
+  "name": "Cisco Meraki Security Events",
+  "summary": "Cisco Meraki Security Event parser",
+  "description": "Cisco Meraki MX series content pack include couple new extractors and GROK pattern to parse Meraki logs.",
+  "vendor": "Cisco Meraki",
+  "url": "https://github.com/hrleinonen/graylog-meraki",
+  "parameters": [],
+  "entities": [
+    {
+      "v": "1",
+      "type": {
+        "name": "input",
+        "version": "1"
+      },
+      "id": "3903dc1d-c955-49a7-8135-74381f66e390",
+      "data": {
+        "title": {
+          "@type": "string",
+          "@value": "MERAKI_LOGS_SECURITY_EVENTS"
+        },
+        "configuration": {
+          "recv_buffer_size": {
+            "@type": "integer",
+            "@value": 262144
+          },
+          "bind_address": {
+            "@type": "string",
+            "@value": "0.0.0.0"
+          },
+          "port": {
+            "@type": "integer",
+            "@value": 5556
+          },
+          "number_worker_threads": {
+            "@type": "integer",
+            "@value": 2
+          }
+        },
+        "static_fields": {},
+        "type": {
+          "@type": "string",
+          "@value": "org.graylog2.inputs.raw.udp.RawUDPInput"
+        },
+        "global": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "extractors": [
+          {
+            "target_field": {
+              "@type": "string",
+              "@value": ""
+            },
+            "condition_value": {
+              "@type": "string",
+              "@value": ""
+            },
+            "order": {
+              "@type": "integer",
+              "@value": 0
+            },
+            "converters": [],
+            "configuration": {
+              "grok_pattern": {
+                "@type": "string",
+                "@value": "src=%{IPV4incPORT:SRCIP}:%{POSINT:SRCPORT} dst=%{IPV4incPORT:DSTIP}:%{POSINT:DSTPORT} mac=%{MAC:MAC} name=%{DATA:NAME} sha256=%{BASE16FLOAT:SHA256} disposition=%{DATA:DISPOSITION} action=%{GREEDYDATA:ACTION}"
+              }
+            },
+            "source_field": {
+              "@type": "string",
+              "@value": "message"
+            },
+            "title": {
+              "@type": "string",
+              "@value": "EXTRACTOR_MERAKI_SECURITY_EVENTS"
+            },
+            "type": {
+              "@type": "string",
+              "@value": "GROK"
+            },
+            "cursor_strategy": {
+              "@type": "string",
+              "@value": "COPY"
+            },
+            "condition_type": {
+              "@type": "string",
+              "@value": "NONE"
+            }
+          }
+        ]
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.2+1686930"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "abfa9b95-47f4-4f2f-8d57-7dd9a6243699",
+      "data": {
+        "name": "GREEDYDATA",
+        "pattern": ".*"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.2+1686930"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "c69e4279-becb-4c65-ada2-44ea1cd32e0f",
+      "data": {
+        "name": "BASE16FLOAT",
+        "pattern": "\\b(?<![0-9A-Fa-f.])(?:[+-]?(?:0x)?(?:(?:[0-9A-Fa-f]+(?:\\.[0-9A-Fa-f]*)?)|(?:\\.[0-9A-Fa-f]+)))\\b"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.2+1686930"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "287c1c8c-7843-4dc5-a2b4-88a05141c8f5",
+      "data": {
+        "name": "DATA",
+        "pattern": ".*?"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.2+1686930"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "cdcc5afd-9c1f-481f-933a-7dfecfd6046e",
+      "data": {
+        "name": "POSINT",
+        "pattern": "\\b(?:[1-9][0-9]*)\\b"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.2+1686930"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "842775d4-7e9e-458f-ae8b-8ef2ba33ca71",
+      "data": {
+        "name": "IPV4incPORT",
+        "pattern": "(?<![0-9])(?:(?:[0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])[.](?:[0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])[.](?:[0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])[.](?:[0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5]))(?![0-9])?"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.2+1686930"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "dd402400-bb53-4612-815c-e6da156d414c",
+      "data": {
+        "name": "MAC",
+        "pattern": "(?:%{CISCOMAC}|%{WINDOWSMAC}|%{COMMONMAC})"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.2+1686930"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "de5b794b-8dab-4463-b586-130a0ba81241",
+      "data": {
+        "name": "WINDOWSMAC",
+        "pattern": "(?:(?:[A-Fa-f0-9]{2}-){5}[A-Fa-f0-9]{2})"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.2+1686930"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "9897a4fe-b3df-4154-a0eb-41158922f3ca",
+      "data": {
+        "name": "CISCOMAC",
+        "pattern": "(?:(?:[A-Fa-f0-9]{4}\\.){2}[A-Fa-f0-9]{4})"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.2+1686930"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "grok_pattern",
+        "version": "1"
+      },
+      "id": "a9cbfd35-7454-43a3-a0ca-d82633ba1c59",
+      "data": {
+        "name": "COMMONMAC",
+        "pattern": "(?:(?:[A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2})"
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=3.0.2+1686930"
+        }
+      ]
+    }
+  ]
+}
